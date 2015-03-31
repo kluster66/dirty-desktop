@@ -38,7 +38,7 @@ RUN apt-get install -y -q locate ssh curl ntp
 
 ########## Tout ce qui concerne la configuration ############
 #Partie 1 les users unix
-
+RUN localedef -v -c -i fr_FR -f UTF-8 ISO_8859-1:1987  || :
 # Création des users nécéssaires
 RUN useradd -m user
 
@@ -46,12 +46,8 @@ RUN useradd -m user
 RUN echo 'user:pass' | chpasswd
 
 # Partie 2 configuration 
-#RUN sed -i 's/DisplayManager.requestPort/!DisplayManager.requestPort/g' /etc/X11/xdm/xdm-config
-#RUN sed -i '/#any host/c\*' /etc/X11/xdm/Xaccess
-#RUN ln -s /usr/bin/Xorg /usr/bin/X
-#RUN echo X11Forwarding yes >> /etc/ssh/ssh_config
-# partie 3 on construit les fichiers de parametre
 
+# partie 3 on construit les fichiers de parametre
 
 #répertoire ou je vais etre quand je vais me connecter
 WORKDIR /home/user/
@@ -61,5 +57,4 @@ WORKDIR /home/user/
 EXPOSE 22
 
 #Démarrage des services
-#CMD /home/shinken/my_commands.sh
-
+CMD ["/usr/sbin/sshd", "-D"]
