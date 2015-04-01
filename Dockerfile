@@ -57,4 +57,5 @@ WORKDIR /home/user/
 EXPOSE 22
 
 #Démarrage des services
-CMD ["/usr/sbin/sshd", "-D"]
+#CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/etc/init.d/ssh", "start"]
