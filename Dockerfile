@@ -32,15 +32,15 @@ ENV 	DEBIAN_FRONTEND noninteractive
 #Installation de x2go
 #RUN apt-get -y -q install xserver-xephyr 
 #RUN add-apt-repository ppa:x2go/stable -y
-RUN 	apt-get -y -q install 	openssh-server
-RUN 	apt-get -y -q install 	xubuntu-desktop
-RUN 	apt-get -y -q install 	openbox \
-				xinit \
-				pcmanfm \
-				chromium-browser \
-				xterm \
-				obconf \
-				obmenu
+RUN 	apt-get -y -q install 	openssh-server xserver-xephyr 
+#RUN 	apt-get -y -q install 	xubuntu-desktop
+RUN     apt-get -y -q install	xfce4 \
+				gtk3-engines-xfce \
+				xfce4-goodies \
+				xfwm4-themes \
+				ppa-purge \
+				gksu \
+				gedit 
 
 RUN 	apt-get install -y -q 	x2goserver \
 				x2goserver-xsession \
@@ -52,16 +52,27 @@ RUN 	apt-get install -y -q 	locate \
 				curl \
 				ntp
 
+RUN 	apt-get install -y -q	gnome-icon-theme-full \
+				tango-icon-theme
+
+RUN apt-get install -y -q	firefox
 ########## Tout ce qui concerne la configuration ############
 #Partie 1 les users unix
 RUN 	localedef -v -c -i fr_FR -f UTF-8 ISO_8859-1:1987  || :
 # Création des users nécéssaires
-RUN 	useradd -m user
+RUN 	useradd -m kluster -s /bin/bash
 
-# Modification des mots de passe
-RUN 	echo 'user:pass' | chpasswd
 
 # Partie 2 configuration 
+
+# configuration user
+RUN 	adduser kluster sudo
+RUN 	echo 'kluster:pass' | chpasswd
+
+#correction pb DBUs
+RUN 	dpkg-divert --local --rename --add /sbin/initctl && \
+	ln -sf /bin/true /sbin/initctl
+
 
 # partie 3 on construit les fichiers de parametre
 
